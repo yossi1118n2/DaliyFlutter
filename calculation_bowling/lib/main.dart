@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:calculation_bowling/calculate.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,6 +34,7 @@ class Page extends StatefulWidget{
 }
 
 class _PageState extends State<Page>{
+  double button_size = 80;
 
   void _pushdatabase() {
     //ここにデータベースに入れるためのコードを記載
@@ -50,7 +52,7 @@ class _PageState extends State<Page>{
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text('計算機'),
+        title: Text('ボウリング計算機'),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -72,15 +74,26 @@ class _PageState extends State<Page>{
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Center(
+              child:GestureDetector(
+                // behavior: HitTestBehavior.deferToChild,
+                onTap: (){
+                  //ナビゲーションバー付きの画面遷移
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return Calculate();
+                      },
+                    ),
+                  );
+                },
+                child:Container(color: Colors.white,  width: button_size * 3 , height: button_size , child: Text('スタート',style: TextStyle(fontSize:button_size / 2, color: Colors.green),),alignment:Alignment.center,),
+              ),
+            ),// This trailing comma makes au
             //ここにWidgetを配置
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _pushdatabase,
-        tooltip: 'データベースに保存',
-        child: Container(color: Colors.red),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
