@@ -26,13 +26,66 @@ class _CalculatePageState extends State<CalculatePage>{
   List<int> _scratch = [0,0,0,0,0];
   List<int> _hpcp = [0,0,0,0,0];
   List<int> _sum = [300,300,300,300,300];
+  List<bool> _name_alert = [false,false,false,false,false];
 
+  //  スコアをリセット
   void reset(){
     setState(() {
         //ここにリセット処理を記載
+          for(int i=0; i <5; i++){
+            _scratch[i] = 0;
+          }
         }
       );
     }
+
+  // HDCP(ハンディーキャップ)をリセット
+  void resetHDCP(){
+    setState(() {
+      //ここにリセット処理を記載
+      for(int i=0; i <5; i++){
+        _hpcp[i] = 0;
+      }
+    }
+    );
+  }
+  // 名前が被っていた場合にアラートを出す
+   namealert(){
+     int count = 0;
+
+     setState(() {
+       //初期化
+       for(int j=0;j<5;j++){
+         _name_alert[j] = false;
+       }
+
+       //外ループ(名前の数)
+       for(int i=0;i<5;i++){
+         //内ループ(入力リストの数)
+         count = 0;
+         for(int j=0;j<5;j++){
+           //indexと配列の要素番号が2ずれいている(ひどいコード)
+           print(_selectItem[j]);
+           if(_selectItem[j] == (i + 2)){
+             count++;
+             if(count >= 2){
+               print("inroop");
+               _name_alert[j] = true;
+               setItems();
+             }
+           }
+         }
+       }
+     });
+  }
+
+  void add(){
+    for(int i=0;i<5;i++){
+      _sum[i] = _hpcp[i] + _scratch[i];
+    }
+  }
+
+
 
 
   @override
@@ -52,24 +105,28 @@ class _CalculatePageState extends State<CalculatePage>{
   void setItems() {
     _items
       ..add(DropdownMenuItem(
-        child: Text('吉川', style: TextStyle(fontSize: 20.0),),
+        child: Text('---', style: TextStyle(fontSize: 20.0),),
         value: 1,
       ))
       ..add(DropdownMenuItem(
-        child: Text('せいげん', style: TextStyle(fontSize: 20.0),),
+        child: Text('吉川', style: TextStyle(fontSize: 20.0,color:_name_alert[0] ? Colors.black : Colors.red),),
         value: 2,
       ))
       ..add(DropdownMenuItem(
-        child: Text('永江', style: TextStyle(fontSize: 20.0),),
+        child: Text('せいげん', style: TextStyle(fontSize: 20.0,color:_name_alert[1] ? Colors.black : Colors.red),),
         value: 3,
       ))
       ..add(DropdownMenuItem(
-        child: Text('沢木', style: TextStyle(fontSize: 20.0),),
+        child: Text('永江', style: TextStyle(fontSize: 20.0,color:_name_alert[2] ? Colors.black : Colors.red),),
         value: 4,
       ))
       ..add(DropdownMenuItem(
-        child: Text('ゆうりん', style: TextStyle(fontSize: 20.0),),
+        child: Text('沢木', style: TextStyle(fontSize: 20.0,color:_name_alert[3] ? Colors.black : Colors.red),),
         value: 5,
+      ))
+      ..add(DropdownMenuItem(
+        child: Text('ゆうりん', style: TextStyle(fontSize: 20.0,color:_name_alert[4] ? Colors.black : Colors.red),),
+        value: 6,
       ));
   }
 
@@ -84,10 +141,12 @@ class _CalculatePageState extends State<CalculatePage>{
               children: [
                 DropdownButton(
                   items: _items,
-                  value: _selectItem[1],
+                  value: _selectItem[0],
                   onChanged: (value) => {
                     setState(() {
-                      _selectItem[1] = value;
+                      _selectItem[0] = value;
+                      namealert();
+                      add();
                     }),
                   },
                 ),
@@ -127,7 +186,7 @@ class _CalculatePageState extends State<CalculatePage>{
                 ),
                 Padding(
                   padding: EdgeInsets.all(5.0),
-                  child: Text('${_sum[1]}', style: TextStyle(fontSize: 36),),
+                  child: Text('${_sum[0]}', style: TextStyle(fontSize: 36),),
                 ),
                 // サイズを指定
 
@@ -143,6 +202,7 @@ class _CalculatePageState extends State<CalculatePage>{
                       onChanged: (value) => {
                         setState(() {
                           _selectItem[1] = value;
+                          namealert();
                         }),
                       },
                     ),
@@ -193,10 +253,12 @@ class _CalculatePageState extends State<CalculatePage>{
               children: [
                 DropdownButton(
                   items: _items,
-                  value: _selectItem[1],
+                  value: _selectItem[2],
                   onChanged: (value) => {
                     setState(() {
-                      _selectItem[1] = value;
+                      namealert();
+                      add();
+                      _selectItem[2] = value;
                     }),
                   },
                 ),
@@ -236,7 +298,7 @@ class _CalculatePageState extends State<CalculatePage>{
                 ),
                 Padding(
                   padding: EdgeInsets.all(5.0),
-                  child: Text('${_sum[1]}', style: TextStyle(fontSize: 36),),
+                  child: Text('${_sum[2]}', style: TextStyle(fontSize: 36),),
                 ),
                 // サイズを指定
 
@@ -247,10 +309,12 @@ class _CalculatePageState extends State<CalculatePage>{
               children: [
                 DropdownButton(
                   items: _items,
-                  value: _selectItem[1],
+                  value: _selectItem[3],
                   onChanged: (value) => {
                     setState(() {
-                      _selectItem[1] = value;
+                      namealert();
+                      add();
+                      _selectItem[3] = value;
                     }),
                   },
                 ),
@@ -290,7 +354,7 @@ class _CalculatePageState extends State<CalculatePage>{
                 ),
                 Padding(
                   padding: EdgeInsets.all(5.0),
-                  child: Text('${_sum[1]}', style: TextStyle(fontSize: 36),),
+                  child: Text('${_sum[3]}', style: TextStyle(fontSize: 36),),
                 ),
                 // サイズを指定
 
@@ -301,10 +365,12 @@ class _CalculatePageState extends State<CalculatePage>{
               children: [
                 DropdownButton(
                   items: _items,
-                  value: _selectItem[1],
+                  value: _selectItem[4],
                   onChanged: (value) => {
                     setState(() {
-                      _selectItem[1] = value;
+                      namealert();
+                      add();
+                      _selectItem[4] = value;
                     }),
                   },
                 ),
@@ -344,12 +410,21 @@ class _CalculatePageState extends State<CalculatePage>{
                 ),
                 Padding(
                   padding: EdgeInsets.all(5.0),
-                  child: Text('${_sum[1]}', style: TextStyle(fontSize: 36),),
+                  child: Text('${_sum[4]}', style: TextStyle(fontSize: 36),),
                 ),
                 // サイズを指定
 
                 //ここにint型のtextboxを追加
               ]
+          ),
+          Center(
+            child:GestureDetector(
+              // behavior: HitTestBehavior.deferToChild,
+              onTap: (){
+                reset();
+              },
+              child:Container(color: Colors.white,  width: 150 , height: 75 , child: Text('調整リセット',style: TextStyle(fontSize: 25, color: Colors.green),),alignment:Alignment.center,),
+            ),
           ),
            Center(
              child:GestureDetector(
