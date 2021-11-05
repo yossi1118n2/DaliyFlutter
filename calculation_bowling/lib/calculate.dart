@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 
 class Calculate extends StatelessWidget{
@@ -24,9 +25,25 @@ class _CalculatePageState extends State<CalculatePage>{
   List<DropdownMenuItem<int>> _items = [];
   List<int> _selectItem = [0,0,0,0,0];
   List<int> _scratch = [0,0,0,0,0];
-  List<int> _hpcp = [0,0,0,0,0];
+  List<int> _hdcp = [0,0,0,0,0];
   List<int> _sum = [300,300,300,300,300];
   List<bool> _name_alert = [false,false,false,false,false];
+
+  var _controller_scratch0 = TextEditingController();
+  var _controller_scratch1 = TextEditingController();
+  var _controller_scratch2= TextEditingController();
+  var _controller_scratch3 = TextEditingController();
+  var _controller_scratch4 = TextEditingController();
+
+
+  var _controller_hdcp0 = TextEditingController();
+  var _controller_hdcp1 = TextEditingController();
+  var _controller_hdcp2 = TextEditingController();
+  var _controller_hdcp3 = TextEditingController();
+  var _controller_hdcp4 = TextEditingController();
+
+
+
 
   //  スコアをリセット
   void reset(){
@@ -35,8 +52,14 @@ class _CalculatePageState extends State<CalculatePage>{
           for(int i=0; i <5; i++){
             _scratch[i] = 0;
           }
+          _controller_scratch0.clear();
+          _controller_scratch1.clear();
+          _controller_scratch2.clear();
+          _controller_scratch3.clear();
+          _controller_scratch4.clear();
         }
       );
+      add();
     }
 
   // HDCP(ハンディーキャップ)をリセット
@@ -44,10 +67,16 @@ class _CalculatePageState extends State<CalculatePage>{
     setState(() {
       //ここにリセット処理を記載
       for(int i=0; i <5; i++){
-        _hpcp[i] = 0;
+        _hdcp[i] = 0;
       }
+      _controller_hdcp0.clear();
+      _controller_hdcp1.clear();
+      _controller_hdcp2.clear();
+      _controller_hdcp3.clear();
+      _controller_hdcp4.clear();
     }
     );
+    add();
   }
   // 名前が被っていた場合にアラートを出す
    namealert(){
@@ -71,7 +100,6 @@ class _CalculatePageState extends State<CalculatePage>{
              if(count >= 2){
                print("inroop");
                _name_alert[j] = true;
-               setItems();
              }
            }
          }
@@ -81,7 +109,9 @@ class _CalculatePageState extends State<CalculatePage>{
 
   void add(){
     for(int i=0;i<5;i++){
-      _sum[i] = _hpcp[i] + _scratch[i];
+      setState(() {
+        _sum[i] = _hdcp[i] + _scratch[i];
+      });
     }
   }
 
@@ -102,6 +132,8 @@ class _CalculatePageState extends State<CalculatePage>{
 
   }
 
+
+
   void setItems() {
     _items
       ..add(DropdownMenuItem(
@@ -109,23 +141,23 @@ class _CalculatePageState extends State<CalculatePage>{
         value: 1,
       ))
       ..add(DropdownMenuItem(
-        child: Text('吉川', style: TextStyle(fontSize: 20.0,color:_name_alert[0] ? Colors.black : Colors.red),),
+        child: Text('吉川', style: TextStyle(fontSize: 20.0,color:Colors.black ),),
         value: 2,
       ))
       ..add(DropdownMenuItem(
-        child: Text('せいげん', style: TextStyle(fontSize: 20.0,color:_name_alert[1] ? Colors.black : Colors.red),),
+        child: Text('せいげん', style:TextStyle(fontSize: 20.0,color:Colors.black ),),
         value: 3,
       ))
       ..add(DropdownMenuItem(
-        child: Text('永江', style: TextStyle(fontSize: 20.0,color:_name_alert[2] ? Colors.black : Colors.red),),
+        child: Text('永江', style: TextStyle(fontSize: 20.0,color:Colors.black ),),
         value: 4,
       ))
       ..add(DropdownMenuItem(
-        child: Text('沢木', style: TextStyle(fontSize: 20.0,color:_name_alert[3] ? Colors.black : Colors.red),),
+        child: Text('沢木', style: TextStyle(fontSize: 20.0,color:Colors.black ),),
         value: 5,
       ))
       ..add(DropdownMenuItem(
-        child: Text('ゆうりん', style: TextStyle(fontSize: 20.0,color:_name_alert[4] ? Colors.black : Colors.red),),
+        child: Text('ゆうりん', style: TextStyle(fontSize: 20.0,color:Colors.black ),),
         value: 6,
       ));
   }
@@ -155,6 +187,15 @@ class _CalculatePageState extends State<CalculatePage>{
                   child: Container(
                     padding: EdgeInsets.all(5),
                     child: TextField(
+                      controller: _controller_scratch0,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      onChanged: (value){
+                        setState(() {
+                          _scratch[0] = int.parse(value);
+                          add();
+                        });
+                      },
                       decoration: InputDecoration(
                         //外枠をつける
                         border: OutlineInputBorder(),
@@ -172,6 +213,15 @@ class _CalculatePageState extends State<CalculatePage>{
                   child: Container(
                     padding: EdgeInsets.all(5),
                     child: TextField(
+                      controller: _controller_hdcp0,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      onChanged: (value){
+                        setState(() {
+                          _hdcp[0] = int.parse(value);
+                          add();
+                        });
+                      },
                       decoration: InputDecoration(
                         //外枠をつける
                         border: OutlineInputBorder(),
@@ -211,6 +261,15 @@ class _CalculatePageState extends State<CalculatePage>{
                       child: Container(
                         padding: EdgeInsets.all(5),
                         child: TextField(
+                          controller: _controller_scratch1,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          onChanged: (value){
+                            setState(() {
+                              _scratch[1] = int.parse(value);
+                              add();
+                            });
+                          },
                           decoration: InputDecoration(
                             //外枠をつける
                             border: OutlineInputBorder(),
@@ -228,6 +287,15 @@ class _CalculatePageState extends State<CalculatePage>{
                       child: Container(
                         padding: EdgeInsets.all(5),
                         child: TextField(
+                          controller: _controller_hdcp1,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          onChanged: (value){
+                            setState(() {
+                              _hdcp[1] = int.parse(value);
+                              add();
+                            });
+                          },
                           decoration: InputDecoration(
                             //外枠をつける
                             border: OutlineInputBorder(),
@@ -267,6 +335,15 @@ class _CalculatePageState extends State<CalculatePage>{
                   child: Container(
                     padding: EdgeInsets.all(5),
                     child: TextField(
+                      controller: _controller_scratch2,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      onChanged: (value){
+                        setState(() {
+                          _scratch[2] = int.parse(value);
+                          add();
+                        });
+                      },
                       decoration: InputDecoration(
                         //外枠をつける
                         border: OutlineInputBorder(),
@@ -284,6 +361,15 @@ class _CalculatePageState extends State<CalculatePage>{
                   child: Container(
                     padding: EdgeInsets.all(5),
                     child: TextField(
+                      controller: _controller_hdcp2,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      onChanged: (value){
+                        setState(() {
+                          _hdcp[2] = int.parse(value);
+                          add();
+                        });
+                      },
                       decoration: InputDecoration(
                         //外枠をつける
                         border: OutlineInputBorder(),
@@ -321,8 +407,18 @@ class _CalculatePageState extends State<CalculatePage>{
                 //Rowが必要なスペースを認識できるようにするために記載
                 Flexible(
                   child: Container(
+
                     padding: EdgeInsets.all(5),
                     child: TextField(
+                      controller: _controller_scratch3,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      onChanged: (value){
+                        setState(() {
+                          _scratch[3] = int.parse(value);
+                          add();
+                        });
+                      },
                       decoration: InputDecoration(
                         //外枠をつける
                         border: OutlineInputBorder(),
@@ -340,6 +436,15 @@ class _CalculatePageState extends State<CalculatePage>{
                   child: Container(
                     padding: EdgeInsets.all(5),
                     child: TextField(
+                      controller: _controller_hdcp3,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      onChanged: (value){
+                        setState(() {
+                          _hdcp[3] = int.parse(value);
+                          add();
+                        });
+                      },
                       decoration: InputDecoration(
                         //外枠をつける
                         border: OutlineInputBorder(),
@@ -379,6 +484,15 @@ class _CalculatePageState extends State<CalculatePage>{
                   child: Container(
                     padding: EdgeInsets.all(5),
                     child: TextField(
+                      controller: _controller_scratch4,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      onChanged: (value){
+                        setState(() {
+                          _scratch[4] = int.parse(value);
+                          add();
+                        });
+                      },
                       decoration: InputDecoration(
                         //外枠をつける
                         border: OutlineInputBorder(),
@@ -396,6 +510,15 @@ class _CalculatePageState extends State<CalculatePage>{
                   child: Container(
                     padding: EdgeInsets.all(5),
                     child: TextField(
+                      controller: _controller_hdcp4,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      onChanged: (value){
+                        setState(() {
+                          _hdcp[4] = int.parse(value);
+                          add();
+                        });
+                      },
                       decoration: InputDecoration(
                         //外枠をつける
                         border: OutlineInputBorder(),
@@ -421,7 +544,7 @@ class _CalculatePageState extends State<CalculatePage>{
             child:GestureDetector(
               // behavior: HitTestBehavior.deferToChild,
               onTap: (){
-                reset();
+                resetHDCP();
               },
               child:Container(color: Colors.white,  width: 150 , height: 75 , child: Text('調整リセット',style: TextStyle(fontSize: 25, color: Colors.green),),alignment:Alignment.center,),
             ),
