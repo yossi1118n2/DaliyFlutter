@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:calculation_bowling/showscore.dart';
 
 
 class Calculate extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      appBar: AppBar(
-        title: Text("スコア計算機")
-      ),
       body: CalculatePage()
     );
   }
@@ -130,6 +128,8 @@ class _CalculatePageState extends State<CalculatePage>{
   void _pushdatabase() {
     //ここにデータベースに入れるためのコードを記載
 
+
+
   }
 
 
@@ -166,6 +166,24 @@ class _CalculatePageState extends State<CalculatePage>{
    @override
    Widget build(BuildContext context){
     return Scaffold(
+        appBar: AppBar(
+          title: Text("スコア計算機"),
+          actions:<Widget>[
+            IconButton(
+               icon: Icon(Icons.add),
+               onPressed: () => setState(() {
+                 //ナビゲーションバー付きの画面遷移
+                 Navigator.of(context).push(
+                   MaterialPageRoute(
+                     builder: (context) {
+                       return Showscore();
+                     },
+                   ),
+                 );
+               }),
+            ),
+          ],
+        ),
       body: Column(
         mainAxisAlignment: (MainAxisAlignment.spaceEvenly),
         children: [
