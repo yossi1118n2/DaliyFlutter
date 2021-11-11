@@ -1,6 +1,5 @@
 import "dart:math" as math;
 import "dart:async";
-import 'package:stream/rspc.dart';
 
 class Generator {
   var rand;
@@ -49,4 +48,48 @@ class Consumer {
       print("consumerが$dataを使ったよ");
     });
   }
+}
+
+class Generator2 {
+  var rand;
+  var intStream;
+  init(StreamController<int> stream) {
+    intStream = stream;
+  }
+
+  // ランダムな整数を作る
+  generator() {
+    var data = 3;
+    print("generatorが$dataを作ったよ");
+    intStream.sink.add(data);
+  }
+
+
+}
+
+
+class AddListen{
+  var newStream;
+  var rand;
+
+  init(StreamController<int> stream) {
+    newStream = stream;
+    rand = new math.Random();
+  }
+
+  generator() {
+    var data = rand.nextInt(1000);
+    print("generatorが$dataを作ったよ");
+    newStream.sink.add(data);
+  }
+
+  consume() {
+    newStream.stream.listen((data) async {
+      print("consumerが$dataを使ったよ");
+    });
+  }
+
+
+
+
 }
