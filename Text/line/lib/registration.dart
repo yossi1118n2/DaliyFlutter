@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:line/authentication_error.dart';
 import 'package:line/scr/home.dart';
+import 'package:flutter/services.dart';
 
 
 // アカウント登録ページ
@@ -109,7 +110,7 @@ class _RegistrationState extends State<Registration> {
                           )
                       );
 
-                    } catch (e) {
+                    } on PlatformException catch(e){
                       // 登録に失敗した場合
                       setState(() {
                         // infoText = auth_error.register_error_msg(e.code);
