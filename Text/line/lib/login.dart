@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:line/authentication_error.dart';
 import 'package:line/registration.dart';
 import 'package:line/scr/home.dart';
+import 'package:flutter/services.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -98,10 +99,10 @@ class _LoginPage extends State<Login> {
                           )
                       );
 
-                    } catch (e) {
+                    } on PlatformException catch(e) {
                       // ログインに失敗した場合
                       setState(() {
-                        //infoText = auth_error.login_error_msg(e.code);
+                        infoText = auth_error.login_error_msg(e.code);
                       });
                     }
                   }
