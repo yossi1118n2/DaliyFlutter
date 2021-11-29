@@ -14,7 +14,7 @@ class Home extends StatefulWidget{
 class HomeState extends State<Home> {
 
 
-  List<String> titleList = ["raki", "rad", "kk"];
+  List<String> titleList = ["general""raki", "rad", "kk"];
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class HomeState extends State<Home> {
                   leading: Icon(Icons.settings),
                   title: Text(titleList[index]),
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Chatpage(name:titleList[index])));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Chatpage(name:titleList[index],uid: widget.user_id)));
                   },
                 ),
                 Divider(),
