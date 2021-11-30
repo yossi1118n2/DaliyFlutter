@@ -14,7 +14,7 @@ class Home extends StatefulWidget{
 class HomeState extends State<Home> {
 
 
-  List<String> titleList = ["general""raki", "rad", "kk"];
+  List<String> titleList = ["general","raki", "rad", "kk"];
 
   @override
   Widget build(BuildContext context) {

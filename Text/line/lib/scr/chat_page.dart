@@ -44,18 +44,12 @@ class _ChatpageState extends State<Chatpage> {
                     Text('毎回同じパスワードを表示'),
                   ],
                 ),
-              Consumer<ApplicationState>(
-                builder: (context, appState, _) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                      GuestBook(
-                        addMessage: (String message) =>
-                            appState.addMessageToGuestBook(message),
-                        messages: _guestBookMessages, // new
-                      ),
-                  ],
-                ),
+              GuestBook(
+                addMessage: (String message) =>
+                    addMessageToGuestBook(message),
+                messages: _guestBookMessages, // new
               ),
+
             ]
         ),
     );
@@ -63,6 +57,7 @@ class _ChatpageState extends State<Chatpage> {
 
 
   Future<DocumentReference> addMessageToGuestBook(String message) {
+    print("addMessageToGuestBook");
     FirebaseAuth.instance.userChanges().listen((user) {
       _guestBookSubscription = FirebaseFirestore.instance
           .collection('guestbook')
@@ -70,6 +65,7 @@ class _ChatpageState extends State<Chatpage> {
           .snapshots()
           .listen((snapshot) {
         _guestBookMessages = [];
+        print("listen");
         snapshot.docs.forEach((document) {
           _guestBookMessages.add(
             GuestBookMessage(
@@ -100,118 +96,118 @@ class GuestBookMessage {
   final String message;
 }
 
-class ApplicationState extends ChangeNotifier {
-  ApplicationState() {
-    init();
-  }
-
-  // Add from here
-  Future<DocumentReference> addMessageToGuestBook(String message) {
-
-    return FirebaseFirestore.instance.collection('guestbook').add(<String, dynamic>{
-      'text': message,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-      'name': FirebaseAuth.instance.currentUser!.displayName,
-      'userId': FirebaseAuth.instance.currentUser!.uid,
-    });
-  }
-  // To here
-
-  Future<void> init() async {
-    await Firebase.initializeApp();
-
-    //リスナー
-    // FirebaseのAuth libralyはこのcallbackが必要。
-    FirebaseAuth.instance.userChanges().listen((user) {
-      if (user != null) {
-        // Add from here
-        _guestBookSubscription = FirebaseFirestore.instance
-            .collection('guestbook')
-            .orderBy('timestamp', descending: true)
-            .snapshots()
-            .listen((snapshot) {
-          _guestBookMessages = [];
-          snapshot.docs.forEach((document) {
-            _guestBookMessages.add(
-              GuestBookMessage(
-                name: document.data()['name'] as String,
-                message: document.data()['text'] as String,
-              ),
-            );
-          });
-          notifyListeners();
-        });
-
-        // to here.
-      } else {
-        _guestBookMessages = [];
-        _guestBookSubscription?.cancel();
-      }
-      notifyListeners();
-    });
-  }
-
-  String? _email;
-  String? get email => _email;
-
-  // Add from here
-  StreamSubscription<QuerySnapshot>? _guestBookSubscription;
-  List<GuestBookMessage> _guestBookMessages = [];
-  List<GuestBookMessage> get guestBookMessages => _guestBookMessages;
-  // to here.
-
-  void startLoginFlow() {
-    notifyListeners();
-  }
-
-  void verifyEmail(
-      String email,
-      void Function(FirebaseAuthException e) errorCallback,
-      ) async {
-    try {
-      var methods =
-      await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
-      _email = email;
-      notifyListeners();
-    } on FirebaseAuthException catch (e) {
-      errorCallback(e);
-    }
-  }
-
-  void signInWithEmailAndPassword(
-      String email,
-      String password,
-      void Function(FirebaseAuthException e) errorCallback,
-      ) async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } on FirebaseAuthException catch (e) {
-      errorCallback(e);
-    }
-  }
-
-  void cancelRegistration() {
-    notifyListeners();
-  }
-
-  void registerAccount(String email, String displayName, String password,
-      void Function(FirebaseAuthException e) errorCallback) async {
-    try {
-      var credential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
-      await credential.user!.updateProfile(displayName: displayName);
-    } on FirebaseAuthException catch (e) {
-      errorCallback(e);
-    }
-  }
-
-  void signOut() {
-    FirebaseAuth.instance.signOut();
-  }
-}
+// class ApplicationState extends ChangeNotifier {
+//   ApplicationState() {
+//     init();
+//   }
+//
+//   // Add from here
+//   Future<DocumentReference> addMessageToGuestBook(String message) {
+//
+//     return FirebaseFirestore.instance.collection('guestbook').add(<String, dynamic>{
+//       'text': message,
+//       'timestamp': DateTime.now().millisecondsSinceEpoch,
+//       'name': FirebaseAuth.instance.currentUser!.displayName,
+//       'userId': FirebaseAuth.instance.currentUser!.uid,
+//     });
+//   }
+//   // To here
+//
+//   Future<void> init() async {
+//     await Firebase.initializeApp();
+//
+//     //リスナー
+//     // FirebaseのAuth libralyはこのcallbackが必要。
+//     FirebaseAuth.instance.userChanges().listen((user) {
+//       if (user != null) {
+//         // Add from here
+//         _guestBookSubscription = FirebaseFirestore.instance
+//             .collection('guestbook')
+//             .orderBy('timestamp', descending: true)
+//             .snapshots()
+//             .listen((snapshot) {
+//           _guestBookMessages = [];
+//           snapshot.docs.forEach((document) {
+//             _guestBookMessages.add(
+//               GuestBookMessage(
+//                 name: document.data()['name'] as String,
+//                 message: document.data()['text'] as String,
+//               ),
+//             );
+//           });
+//           notifyListeners();
+//         });
+//
+//         // to here.
+//       } else {
+//         _guestBookMessages = [];
+//         _guestBookSubscription?.cancel();
+//       }
+//       notifyListeners();
+//     });
+//   }
+//
+//   String? _email;
+//   String? get email => _email;
+//
+//   // Add from here
+//   StreamSubscription<QuerySnapshot>? _guestBookSubscription;
+//   List<GuestBookMessage> _guestBookMessages = [];
+//   List<GuestBookMessage> get guestBookMessages => _guestBookMessages;
+//   // to here.
+//
+//   void startLoginFlow() {
+//     notifyListeners();
+//   }
+//
+//   void verifyEmail(
+//       String email,
+//       void Function(FirebaseAuthException e) errorCallback,
+//       ) async {
+//     try {
+//       var methods =
+//       await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+//       _email = email;
+//       notifyListeners();
+//     } on FirebaseAuthException catch (e) {
+//       errorCallback(e);
+//     }
+//   }
+//
+//   void signInWithEmailAndPassword(
+//       String email,
+//       String password,
+//       void Function(FirebaseAuthException e) errorCallback,
+//       ) async {
+//     try {
+//       await FirebaseAuth.instance.signInWithEmailAndPassword(
+//         email: email,
+//         password: password,
+//       );
+//     } on FirebaseAuthException catch (e) {
+//       errorCallback(e);
+//     }
+//   }
+//
+//   void cancelRegistration() {
+//     notifyListeners();
+//   }
+//
+//   void registerAccount(String email, String displayName, String password,
+//       void Function(FirebaseAuthException e) errorCallback) async {
+//     try {
+//       var credential = await FirebaseAuth.instance
+//           .createUserWithEmailAndPassword(email: email, password: password);
+//       await credential.user!.updateProfile(displayName: displayName);
+//     } on FirebaseAuthException catch (e) {
+//       errorCallback(e);
+//     }
+//   }
+//
+//   void signOut() {
+//     FirebaseAuth.instance.signOut();
+//   }
+// }
 
 class GuestBook extends StatefulWidget {
   // Modify the following line
