@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:understandprovider/nextpage.dart';
 
+//ChangeNotifierを withしている。
+//withは外付けのイメージ(よくわからない)
 class Book with ChangeNotifier {
   Book(this.id, this.title);
 
@@ -14,10 +17,13 @@ class Book with ChangeNotifier {
   }
 }
 
+
 class Books with ChangeNotifier {
   List<Book> books = [
     Book('1', 'Harry Potter'),
     Book('2', 'FACTFULNESS'),
+    Book('3', 'Yossi'),
+    Book('4', 'Harari')
   ];
 
   Book findById(String id) {
@@ -39,6 +45,7 @@ class Books with ChangeNotifier {
   }
 }
 
+//これがメインのstateless
 class BookshelfScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -47,8 +54,6 @@ class BookshelfScreen extends StatelessWidget {
         title: const Text('Book List'),
       ),
       body: Center(
-        child: SizedBox(
-          height: 200,
           child: ChangeNotifierProvider(
             create: (ctx) => Books(),
             child: Column(
@@ -66,7 +71,6 @@ class BookshelfScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
     );
   }
 }
@@ -103,7 +107,9 @@ class BookItem extends StatelessWidget {
         icon: const Icon(
           Icons.book,
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => nextpage()));
+        },
       ),
     );
   }
