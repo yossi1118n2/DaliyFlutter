@@ -13,6 +13,8 @@ class Book with ChangeNotifier {
 
   void toggleFavorite() {
     isFavorite = !isFavorite;
+    //変更があったことを全体に通知する。
+    print("変更を全体に通知します。[Book]");
     notifyListeners();
   }
 }
@@ -37,6 +39,8 @@ class Books with ChangeNotifier {
     }
 
     book.toggleFavorite();
+    //変更を全体に通知
+    print("変更を全体に通知します。[toggleFavorite]");
     notifyListeners();
   }
 
@@ -98,6 +102,7 @@ class BookItem extends StatelessWidget {
         title: Text(book.id),
         subtitle: Text(book.title),
         trailing: IconButton(
+          //変更を通知する。
           icon: Icon(book.isFavorite ? Icons.star : Icons.star_border),
           onPressed: () => Provider.of<Books>(context, listen: false)
               .toggleFavorite(book.id),
